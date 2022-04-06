@@ -2,7 +2,6 @@
 Author: QX
 
 token = ''
-
 username = 'xqyn'
 
 useremail = 'nxquy.bms@gmail.com'
