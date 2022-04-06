@@ -1,0 +1,187 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "statsmodels.ipynb",
+      "provenance": [],
+      "authorship_tag": "ABX9TyOdbfCQpbapzAKUTquOvun3",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/xqyn/Modeling/blob/main/hello\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "[statsmodels](https://www.statsmodels.org/devel/index.html)"
+      ],
+      "metadata": {
+        "id": "x0nhtCSb5bqt"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "import statsmodels.api as sm\n",
+        "import statsmodels.formula.api as smf"
+      ],
+      "metadata": {
+        "id": "EFV2xDclDLes"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dat = sm.datasets.get_rdataset(\"Guerry\", \"HistData\").data\n",
+        "#Fit regression model (using the natural log of one of the regressors)\n",
+        "results = smf.ols('Lottery ~ Literacy + np.log(Pop1831)', data=dat).fit()"
+      ],
+      "metadata": {
+        "id": "tPnaAMSyDRhN"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(results.summary())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ZKX5z7-zDV_v",
+        "outputId": "4eb7521c-c754-421d-ec57-cbd9a36170f3"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "                            OLS Regression Results                            \n",
+            "==============================================================================\n",
+            "Dep. Variable:                Lottery   R-squared:                       0.348\n",
+            "Model:                            OLS   Adj. R-squared:                  0.333\n",
+            "Method:                 Least Squares   F-statistic:                     22.20\n",
+            "Date:                Wed, 06 Apr 2022   Prob (F-statistic):           1.90e-08\n",
+            "Time:                        08:22:02   Log-Likelihood:                -379.82\n",
+            "No. Observations:                  86   AIC:                             765.6\n",
+            "Df Residuals:                      83   BIC:                             773.0\n",
+            "Df Model:                           2                                         \n",
+            "Covariance Type:            nonrobust                                         \n",
+            "===================================================================================\n",
+            "                      coef    std err          t      P>|t|      [0.025      0.975]\n",
+            "-----------------------------------------------------------------------------------\n",
+            "Intercept         246.4341     35.233      6.995      0.000     176.358     316.510\n",
+            "Literacy           -0.4889      0.128     -3.832      0.000      -0.743      -0.235\n",
+            "np.log(Pop1831)   -31.3114      5.977     -5.239      0.000     -43.199     -19.424\n",
+            "==============================================================================\n",
+            "Omnibus:                        3.713   Durbin-Watson:                   2.019\n",
+            "Prob(Omnibus):                  0.156   Jarque-Bera (JB):                3.394\n",
+            "Skew:                          -0.487   Prob(JB):                        0.183\n",
+            "Kurtosis:                       3.003   Cond. No.                         702.\n",
+            "==============================================================================\n",
+            "\n",
+            "Warnings:\n",
+            "[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "import statsmodels.api as sm"
+      ],
+      "metadata": {
+        "id": "zuyX_apmDaeS"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Generate artificial data (2 regressors + constant)\n",
+        "nobs = 100\n",
+        "X = np.random.random((nobs, 2))\n",
+        "X = sm.add_constant(X)\n",
+        "beta = [1, .1, .5]\n",
+        "\n",
+        "e = np.random.random(nobs)\n",
+        "y = np.dot(X, beta) + e\n",
+        "\n",
+        "# Fit regression model\n",
+        "results = sm.OLS(y, X).fit()\n",
+        "\n",
+        "# Inspect the results\n",
+        "print(results.summary())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rl21vA-tDea4",
+        "outputId": "53539c8c-03d0-49fe-bb3e-2eb4e2a0f5a0"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "                            OLS Regression Results                            \n",
+            "==============================================================================\n",
+            "Dep. Variable:                      y   R-squared:                       0.214\n",
+            "Model:                            OLS   Adj. R-squared:                  0.198\n",
+            "Method:                 Least Squares   F-statistic:                     13.18\n",
+            "Date:                Wed, 06 Apr 2022   Prob (F-statistic):           8.61e-06\n",
+            "Time:                        08:22:42   Log-Likelihood:                -9.9680\n",
+            "No. Observations:                 100   AIC:                             25.94\n",
+            "Df Residuals:                      97   BIC:                             33.75\n",
+            "Df Model:                           2                                         \n",
+            "Covariance Type:            nonrobust                                         \n",
+            "==============================================================================\n",
+            "                 coef    std err          t      P>|t|      [0.025      0.975]\n",
+            "------------------------------------------------------------------------------\n",
+            "const          1.5668      0.065     24.096      0.000       1.438       1.696\n",
+            "x1             0.0809      0.093      0.874      0.384      -0.103       0.265\n",
+            "x2             0.4348      0.089      4.862      0.000       0.257       0.612\n",
+            "==============================================================================\n",
+            "Omnibus:                       23.164   Durbin-Watson:                   2.175\n",
+            "Prob(Omnibus):                  0.000   Jarque-Bera (JB):                5.753\n",
+            "Skew:                          -0.192   Prob(JB):                       0.0563\n",
+            "Kurtosis:                       1.889   Cond. No.                         4.73\n",
+            "==============================================================================\n",
+            "\n",
+            "Warnings:\n",
+            "[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
